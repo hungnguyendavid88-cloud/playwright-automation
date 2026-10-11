@@ -3,9 +3,12 @@ import "dotenv/config";
 
 export default defineConfig({
   testDir: "./tests",
+  // Baseline images for toHaveScreenshot live in ./screenshots (not next to the spec).
+  snapshotPathTemplate: "{snapshotDir}/../screenshots/{arg}-{projectName}-{platform}{ext}",
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
-  reporter: [["html", { open: "never" }], ["list"]],
+  // CleanupReporter must stay last: it deletes test-results after a fully passed run.
+  reporter: [["html", { open: "never" }], ["list"], ["./utils/CleanupReporter.ts"]],
   use: {
     baseURL: process.env.BASE_URL ?? "https://playwright.dev",
     trace: "on-first-retry",
