@@ -11,5 +11,18 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    {
+      // Headed only: opens Chromium maximized (viewport follows the real window size).
+      // Run: npx playwright test --project=chromium-maximized --headed
+      name: "chromium-maximized",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: null,
+        deviceScaleFactor: undefined, // not allowed together with viewport: null
+        launchOptions: { args: ["--start-maximized"] },
+      },
+    },
+  ],
 });
